@@ -1,0 +1,103 @@
+Writing a program. 
+
+Yes this chapter 6 of programming principles and practice. The reason I'm going through
+this section of the book is that I have several long form coding exercises to complete
+. Also I need to slow down and get better at analyzing problem sets before I can consider them
+"done" i.e. with that binary gap problem , I missed a few patterns in my bit analysis because I was 
+frustrated and kinda in a rush. 
+
+There are several goals in this chapter (from the book ):
+    
+    *   Illustrate design and programming techniques 
+    *   Gives us a chance to explore the kinds of decisions that a programmer
+        must make and the considerations that go into such decisions 
+    *   Doesn't require too many new programming language constructs 
+    *   Is complicated enough to require thought about its design 
+    *   Allows for many variations in its solution 
+    *   Solves an easily understood problem 
+    *   Solves a problem that's worth solving 
+    *   Has a solution that is small enough to completly present and completely comprehend 
+
+Stages of development:
+Analysis -> what should be done and write a description of your ( current) understanding of that. 
+Such a description is called a set of requirements or specification. 
+
+Design: Create an overall structure for the system, deciding which parts of the implementation should have
+and how those parts should communicate. 
+
+Implementation: Write the code, debug it and test
+
+
+Strategy: 
+
+* is the problem statement clear? 
+* does the problem seem manageable? 
+* Break the problem down into manageable parts
+* any tools, libraries , that might help? The answer is almost always yes. 
+* Look for parts of a solution that can be separately described.
+
+* BUILD a small, limited version of the program that solves a key part of the problem. 
+
+Sometimes, such a limited initial version aimed at experimentation is called a prototype.
+
+
+Some examples of the Calculator program are provided: 
+
+STATE_ACTION 
+PROMPT: Expression: 
+INPUT:  Expression: 2+2
+OUTPUT: Result: 4 
+
+PROMPT: Expression: 
+INPUT:  Expression: 2+2*3
+OUTPUT: Result: 8
+
+PROMPT: Expression: 
+INPUT:  Expression: 2+3-25/5
+OUTPUT: Result: 0
+
+We need to express a (kind, value) pair in code. Asking around yields that we need 
+to create our own type for a Token. 
+
+The problem becomes a bit more complicated than our first try because 
+while we can get an expression and store it inside a vector of tokens, we can't 
+really handle order of operations generically enough in a simple way. say we find 
+the mult or division operator first, and its in the middle of the expression, we calculate that 
+then what? how do we handle expressions like 
+
+1+2*3 
+1*2+3 
+1+2*3+4
+1+(2*3)+4. 
+
+How will we handle parentheses? 
+
+Some answers 
+1. if we type in 45+5/7 how do we find the individual parts 45 , + , 5 , /, and 7 in the input (tokenize )
+2. what terminates an input expression newline? 
+3. how do we represent 45+5/7 as data so that we can evaluate it? 
+4. how doe we make sure that 45+5/7 is evaluated as 45+(5/7)
+
+
+
+After tokens have been produced the program must ensure that complete expressions 
+are undesrstood correctly. I.e. 45+11.5/7 means 45+(11.5/7) and not (45 + 11.5)/7
+
+We need a grammar, a set of rules that defines what an expression is and how to process it
+// this is the whole point of me doing this! this is a mini parser
+
+// a simple expression grammar:
+Expression:
+    Term
+    Expression "+" Term // addition 
+    Expression "-" Term // subtraction 
+Term:
+    Primary
+    Term "*" Primary    // multiplication 
+    Term "/" Primary    // division 
+    Term "%" Primary    // remainder (modulo)
+Primary:
+    Number
+    "(" Expression ")"  //grouping
+Number:
+    floating-point literal
